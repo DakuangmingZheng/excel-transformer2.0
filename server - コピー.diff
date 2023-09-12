@@ -1,0 +1,30 @@
+Index: api4/api.go
+===================================================================
+--- api4/api.go	(revision 4479)
++++ api4/api.go	(revision 4480)
+@@ -28,6 +28,29 @@
+ 	Bots *mux.Router // 'api/v4/bots'
+ 	Bot  *mux.Router // 'api/v4/bots/{bot_user_id:[A-Za-z0-9]+}'
+ 
++	/* Ryobi Systems CloudOffice Meeting Mod 20210325 START */
++	Meetings        *mux.Router // 'api/v4/meetings'
++	Meeting         *mux.Router // 'api/v4/meetings/{meeting_id:[A-Za-z0-9]+}'
++	MeetingByUserId *mux.Router // 'api/v4/meetings/userid/{user_id:[A-Za-z0-9]+}'
++	/* Ryobi Systems CloudOffice Meeting Mod 20210325 END */
++
++	/* Ryobi Systems CloudOffice Meeting Mod 20210615 START */
++	MeetingMng       *mux.Router // 'api/v4/MeetingMng'
++	MeetingMngDetail *mux.Router // 'api/v4/MeetingMngDetail'
++	MeetingMngDelete *mux.Router // 'api/v4/MeetingMngDelete'
++	/* Ryobi Systems CloudOffice Meeting Mod 20210615 END */
++
++	/* Ryobi Systems CloudOffice MeetingStatus Mod 20210913 START */
++	MeetingStatus *mux.Router // 'api/v4/MeetingStatus'
++	MeetingEnd    *mux.Router // 'api/v4/MeetingEnd'
++	/* Ryobi Systems CloudOffice MeetingStatus Mod 20210913 END */
++
++	/* Ryobi Systems CloudOffice CronChat Mod 20211129 START */
++	CronChat        *mux.Router // 'api/v4/CronChat'
++	Chat            *mux.Router // 'api/v4/Chat'
++	ChannelSettings *mux.Router // 'api/v4/ChannelSettings'
++	/* Ryobi Systems CloudOffice CronChat Mod 20211129 END */
