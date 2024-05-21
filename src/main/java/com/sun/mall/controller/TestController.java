@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.mall.entity.InExcel;
 import com.sun.mall.utils.ExcelUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @author sunql
@@ -26,6 +44,21 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Controller
 @RequestMapping(value = "/excel")
 public class TestController {
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile() {
+        Resource resource = resourceLoader.getResource("classpath:download.txt");
+        if (resource.exists()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @RequestMapping(value = "/index")
     public String test() {
@@ -50,7 +83,7 @@ public class TestController {
             excelList.add("2023/9/12");
             sheetDataList.add(excelList);
         }
-        ExcelUtils.export(response,"导出表",sheetDataList);
+        ExcelUtils.export(response,"export",sheetDataList);
     }
     @PostMapping("/countDiff")
     public void countDiff(@RequestPart("file") MultipartFile multipartFile, HttpServletResponse response) throws Exception {
